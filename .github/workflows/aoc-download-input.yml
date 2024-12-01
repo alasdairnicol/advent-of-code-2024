@@ -8,6 +8,8 @@ jobs:
     name: ⬇️ Download Input Files ⬇️
     runs-on: ubuntu-latest
     if: startsWith(github.repository, 'alasdairnicol') # don't run in forks
+    permissions:
+      contents: write # Allow writing to the repository
     steps:
       - uses: actions/checkout@v4
       - name: Run download script
