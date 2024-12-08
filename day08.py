@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from collections import defaultdict
 import itertools
+import math
 
 Point = tuple[int, int]
 Grid = dict[str, list[Point]]
@@ -31,6 +32,8 @@ def antinodes_for_pair_part_1(point_a: Point, point_b: Point, width: int, height
 
 def antinodes_for_pair_part_2(point_a: Point, point_b: Point, width: int, height: int):
     delta = (point_b[0] - point_a[0], point_b[1] - point_a[1])
+    gcd = math.gcd(*delta)
+    min_step = (delta[0] // gcd, delta[1] // gcd)
     yield point_a
 
     point = point_a
@@ -38,14 +41,14 @@ def antinodes_for_pair_part_2(point_a: Point, point_b: Point, width: int, height
         if not (0 <= point[0] < width and 0 <= point[1] < height):
             break
         yield point
-        point = point[0] + delta[0], point[1] + delta[1]
+        point = point[0] + min_step[0], point[1] + min_step[1]
     # extend the other way
     point = point_a
     while True:
         if not (0 <= point[0] < width and 0 <= point[1] <= height):
             break
         yield point
-        point = point[0] - delta[0], point[1] - delta[1]
+        point = point[0] - min_step[0], point[1] - min_step[1]
 
 
 def count_antinodes(grid: Grid, width: int, height: int, antinodes_for_pair) -> int:
