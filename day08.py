@@ -15,14 +15,21 @@ def parse_grid(lines: list[str]) -> Grid:
     return grid
 
 
-def antinodes_for_pair(point_a, point_b):
-    return {
+def in_bounds(point: Point, width: int, height: int):
+    return 0 <= point[0] < width and 0 <= point[1] < height
+
+
+def antinodes_for_pair_part_1(point_a: Point, point_b: Point, width: int, height: int):
+    points = [
         (2 * point_a[0] - point_b[0], 2 * point_a[1] - point_b[1]),
         (2 * point_b[0] - point_a[0], 2 * point_b[1] - point_a[1]),
-    }
+    ]
+    for point in points:
+        if in_bounds(point, width, height):
+            yield point
 
 
-def antinodes_for_pair_2(point_a, point_b, width, height):
+def antinodes_for_pair_part_2(point_a: Point, point_b: Point, width: int, height: int):
     delta = (point_b[0] - point_a[0], point_b[1] - point_a[1])
     yield point_a
 
@@ -41,19 +48,11 @@ def antinodes_for_pair_2(point_a, point_b, width, height):
         point = point[0] - delta[0], point[1] - delta[1]
 
 
-def do_part_1(grid: Grid, width: int, height: int) -> int:
+def count_antinodes(grid: Grid, width: int, height: int, antinodes_for_pair) -> int:
     antinodes = set()
     for antennas in grid.values():
         for point_a, point_b in itertools.combinations(antennas, 2):
-            antinodes |= antinodes_for_pair(point_a, point_b)
-    return len([a for a in antinodes if 0 <= a[0] < width and 0 <= a[1] < height])
-
-
-def do_part_2(grid: Grid, width: int, height: int) -> int:
-    antinodes = set()
-    for antennas in grid.values():
-        for point_a, point_b in itertools.combinations(antennas, 2):
-            antinodes |= set(antinodes_for_pair_2(point_a, point_b, width, height))
+            antinodes |= set(antinodes_for_pair(point_a, point_b, width, height))
     return len(antinodes)
 
 
@@ -62,12 +61,11 @@ def main():
     grid = parse_grid(lines)
     width = len(lines[0].strip())
     height = len(lines)
-    print(grid)
 
-    part_1 = do_part_1(grid, width, height)
+    part_1 = count_antinodes(grid, width, height, antinodes_for_pair_part_1)
     print(f"{part_1=}")
 
-    part_2 = do_part_2(grid, width, height)
+    part_2 = count_antinodes(grid, width, height, antinodes_for_pair_part_2)
     print(f"{part_2=}")
 
 
