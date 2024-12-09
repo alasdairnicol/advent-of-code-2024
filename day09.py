@@ -11,7 +11,7 @@ class FileSystem(Protocol):
         pass
 
     def checksum(self) -> int:
-        return 1
+        pass
 
 
 def expand(input: str) -> list[int | None]:
@@ -26,7 +26,7 @@ def expand(input: str) -> list[int | None]:
     return expanded
 
 
-class Part1FileSystem(FileSystem):
+class Part1FileSystem:
     def __init__(self, input_str):
         self.blocks = expand(input_str)
 
@@ -43,7 +43,7 @@ class Part1FileSystem(FileSystem):
         return sum(i * x for i, x in enumerate(self.blocks))
 
 
-class Part2FileSystem(FileSystem):
+class Part2FileSystem:
     def __init__(self, input_str):
         self.expanded = self.expand(input_str)
         self.files = {
