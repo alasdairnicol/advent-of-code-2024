@@ -26,7 +26,7 @@ def is_solvable(
     return False
 
 
-def main():
+def main() -> None:
     lines = read_input()
     equations = [parse_line(line) for line in lines]
 

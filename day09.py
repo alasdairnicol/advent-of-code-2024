@@ -92,7 +92,7 @@ def do_part(fs: FileSystem) -> int:
     return fs.checksum()
 
 
-def main():
+def main() -> None:
     input_str = read_input()
 
     part_1 = do_part(Part1FileSystem(input_str))

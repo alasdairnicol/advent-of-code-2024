@@ -45,7 +45,7 @@ def do_part_2(grid: Grid) -> int:
     return sum(is_xmas_at_position(grid, x, y) for x, y in grid)
 
 
-def main():
+def main() -> None:
     lines = read_input()
     grid = make_grid(lines)
 

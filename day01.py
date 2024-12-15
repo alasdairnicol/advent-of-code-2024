@@ -16,7 +16,7 @@ def do_part_2(list_a: list[int], list_b: list[int]) -> int:
     return sum(a * b_counts[a] for a in list_a)
 
 
-def main():
+def main() -> None:
     list_a, list_b = build_lists(read_input())
 
     part_1 = do_part_1(list_a, list_b)

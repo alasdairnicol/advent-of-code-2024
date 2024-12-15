@@ -56,7 +56,7 @@ def trailhead_score_part_2(grid: Grid, point: Point) -> int:
     return count
 
 
-def main():
+def main() -> None:
     lines = read_input()
     grid = parse_grid(lines)
     zeroes = [k for k, v in grid.items() if v == 0]
