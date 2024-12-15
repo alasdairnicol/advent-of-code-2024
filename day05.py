@@ -48,7 +48,7 @@ def do_part_2(rules: Rules, updates: list[Update]) -> int:
     )
 
 
-def main():
+def main() -> None:
     rules_str, updates_str = read_input()
 
     rules = make_rules(rules_str.split("\n"))

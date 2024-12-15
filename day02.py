@@ -43,7 +43,7 @@ def do_part_2(lines: list[list[int]]) -> int:
     return sum(check_line_with_tolerance(line) for line in lines)
 
 
-def main():
+def main() -> None:
     lines = [parse_line(line) for line in read_input()]
 
     part_1 = do_part_1(lines)

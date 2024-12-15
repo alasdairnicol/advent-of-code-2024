@@ -21,7 +21,7 @@ def do_blinks(counts: dict, blinks: int) -> dict:
     return counts
 
 
-def main():
+def main() -> None:
     input = read_input()
     numbers = [int(x) for x in input.split()]
     counts = Counter(numbers)

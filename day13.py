@@ -34,7 +34,7 @@ def total_presses(machines: list[Machine], offset: int = 0) -> int:
     return total
 
 
-def main():
+def main() -> None:
     machine_strings = read_input()
     machines = [parse_machine(machine_str) for machine_str in machine_strings]
 

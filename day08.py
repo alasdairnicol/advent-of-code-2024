@@ -59,7 +59,7 @@ def count_antinodes(grid: Grid, width: int, height: int, antinodes_for_pair) -> 
     return len(antinodes)
 
 
-def main():
+def main() -> None:
     lines = read_input()
     grid = parse_grid(lines)
     width = len(lines[0].strip())

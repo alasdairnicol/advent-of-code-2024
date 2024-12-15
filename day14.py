@@ -112,7 +112,7 @@ def display_tree(guards, width, height, turns):
     show_image(guards, width, height)
 
 
-def main(show_tree):
+def main(show_tree) -> None:
     lines = read_input()
 
     width = 101

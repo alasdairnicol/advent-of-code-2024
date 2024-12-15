@@ -70,7 +70,7 @@ def do_part_2(
     return count
 
 
-def main():
+def main() -> None:
     lines = read_input()
     obstructions = find_obstructions(lines)
     guard = find_guard(lines)

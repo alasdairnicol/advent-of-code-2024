@@ -22,7 +22,7 @@ def do_part_2(line: str) -> int:
     return total
 
 
-def main():
+def main() -> None:
     line = read_input()
     part_1 = do_part_1(line)
     print(f"{part_1=}")
