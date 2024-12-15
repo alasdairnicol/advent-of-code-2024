@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-from typing import Literal
+from typing import Literal, TypeGuard, get_args
 
 Point = tuple[int, int]
 Vector = tuple[int, int]
 Grid = dict[Point, str]
 Instruction = Literal[">", "v", "<", "^"]
+VALID_INSTRUCTIONS = set(get_args(Instruction))
 
 
 def score_grid(grid: Grid) -> int:
@@ -124,13 +125,17 @@ def move_robot_part_2(grid: Grid, robot: Point, instruction: Instruction):
     return robot[0] + dx, robot[1] + dy
 
 
-def main():
-    lines_str, instructions = read_input()
+def is_instruction(s: str) -> TypeGuard[Instruction]:
+    return s in VALID_INSTRUCTIONS
+
+
+def main() -> None:
+    lines_str, instructions_with_newlines = read_input()
     lines = lines_str.split("\n")
 
     grid = make_grid_part_1(lines)
     robot = find_robot_part_1(lines)
-    instructions = instructions.replace("\n", "")
+    instructions = [i for i in instructions_with_newlines if is_instruction(i)]
 
     for instruction in instructions:
         robot = move_robot_part_1(grid, robot, instruction)
