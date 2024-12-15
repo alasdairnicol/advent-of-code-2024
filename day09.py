@@ -3,10 +3,6 @@ from typing import Protocol
 
 
 class FileSystem(Protocol):
-
-    def __init__(self, input_str) -> None:
-        pass
-
     def defragment(self) -> None:
         pass
 
@@ -30,7 +26,7 @@ class Part1FileSystem:
     def __init__(self, input_str):
         self.blocks = expand(input_str)
 
-    def defragment(self):
+    def defragment(self) -> None:
         out = self.blocks[:]
         for i, x in enumerate(out):
             if x is None:
@@ -39,8 +35,8 @@ class Part1FileSystem:
                 out[i] = val
         self.blocks = out
 
-    def checksum(self):
-        return sum(i * x for i, x in enumerate(self.blocks))
+    def checksum(self) -> int:
+        return sum(i * x for i, x in enumerate(self.blocks) if x is not None)
 
 
 class Part2FileSystem:
@@ -76,15 +72,15 @@ class Part2FileSystem:
                 self.empty_spaces[i] = (index + file_length, length - file_length)
                 return
 
-    def defragment(self):
+    def defragment(self) -> None:
         for file_number, (file_index, file_length) in reversed(self.files.items()):
             self.move_file(file_index, file_length, file_number)
 
     @staticmethod
-    def file_checksum(file_index, file_length, file_number):
+    def file_checksum(file_index, file_length, file_number) -> int:
         return file_number * sum(range(file_index, file_index + file_length))
 
-    def checksum(self):
+    def checksum(self) -> int:
         return sum(
             self.file_checksum(file_index, file_length, file_number)
             for (file_number, (file_index, file_length)) in self.files.items()
