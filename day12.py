@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import itertools
 from collections import defaultdict
+from typing import TypeVar
 
+
+T = TypeVar("T")
 Point = tuple[int, int]
-Grid = dict[Point, int]
+Grid = dict[Point, T]
 
 
-def num_neighbours_for_point(grid: Grid, point: Point) -> int:
+def num_neighbours_for_point(grid: Grid[str], point: Point) -> int:
     return len(
         [
             dx
@@ -23,7 +26,9 @@ def count_edges(edges_dict) -> int:
     return total
 
 
-def fill_shape(grid: Grid, shape_sizes: Grid, shape_edges: Grid, point: Point):
+def fill_shape(
+    grid: Grid[str], shape_sizes: Grid[int], shape_edges: Grid[int], point: Point
+):
     value = grid[point]
     queue = set([point])
     shape = set()
@@ -50,7 +55,7 @@ def fill_shape(grid: Grid, shape_sizes: Grid, shape_edges: Grid, point: Point):
         shape_edges[point] = num_edges
 
 
-def main():
+def main() -> None:
     lines = read_input()
 
     grid = {
@@ -65,8 +70,8 @@ def main():
         for i, val in enumerate(line.strip())
     }
 
-    shape_sizes = {}
-    shape_edges = {}
+    shape_sizes: dict[Point, int] = {}
+    shape_edges: dict[Point, int] = {}
     for point in grid:
         if point in shape_sizes:
             continue
