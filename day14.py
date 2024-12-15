@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
-from collections import Counter
 import math
+from collections import Counter
 
 Guard = tuple[int, int, int, int]
 

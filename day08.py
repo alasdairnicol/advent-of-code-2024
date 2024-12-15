@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-from collections import defaultdict
 import itertools
 import math
+from collections import defaultdict
 
 Point = tuple[int, int]
 Grid = dict[str, list[Point]]
