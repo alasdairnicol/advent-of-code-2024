@@ -52,6 +52,37 @@ def do_part_1(guards: list[Guard], width: int, height: int) -> int:
     return math.prod(quadrants)
 
 
+def find_mean_point(guards: list[Guard]) -> tuple[float, float]:
+    return (
+        sum(guard[0] for guard in guards) / len(guards),
+        sum(guard[1] for guard in guards) / len(guards),
+    )
+
+
+def sum_square_distances(guards: list[Guard]) -> float:
+    mean = find_mean_point(guards)
+    return sum(
+        (guard[0] - mean[0]) ** 2 + (guard[1] - mean[1]) ** 2 for guard in guards
+    )
+
+
+def do_part_2(guards: list[Guard], width: int, height: int) -> int:
+    # I originally found the solution by generating bitmaps and eyeballing the images
+    # This approach of minimising the square distance is thanks to Reddit
+    original_guards = guards[:]
+    total_square_distances: dict[int, float] = {}
+    for i in range(1, width * height + 1):
+        guards = [find_position(guard, width, height) for guard in guards]
+        total_square_distances[i] = sum_square_distances(guards)
+
+    # We're back in the original position. No point checking any further
+    # Credit to @jamienicol for predicting it would cycle every width*height turns
+    assert guards == original_guards
+
+    # Return the key with the small sum of square distances
+    return sorted(total_square_distances, key=lambda k: total_square_distances[k])[0]
+
+
 def main():
     lines = read_input()
 
@@ -62,7 +93,7 @@ def main():
     part_1 = do_part_1(guards, width, height)
     print(f"{part_1=}")
 
-    part_2 = "???"
+    part_2 = do_part_2(guards, width, height)
     print(f"{part_2=}")
 
 
