@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 from collections import Counter
 import math
 
@@ -83,7 +84,35 @@ def do_part_2(guards: list[Guard], width: int, height: int) -> int:
     return sorted(total_square_distances, key=lambda k: total_square_distances[k])[0]
 
 
-def main():
+def show_image(guards, width, height):
+    """
+    Show the image for a particular set of guards
+    """
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise ImportError("Install pillow to use this function") from exc
+
+    # Create a blank image (white background)
+    image = Image.new("1", (width, height), 0)  # "1" for 1-bit pixels (binary image)
+
+    # Access the image's pixel map
+    pixel_map = image.load()
+
+    # Set the pixels in your list to "on" (1)
+    for x, y, *_ in guards:
+        if 0 <= x < width and 0 <= y < height:  # Ensure the pixel is within bounds
+            pixel_map[x, y] = 1
+
+    image.show()
+
+
+def display_tree(guards, width, height, turns):
+    guards = [find_position(guard, width, height, turns=turns)[:2] for guard in guards]
+    show_image(guards, width, height)
+
+
+def main(show_tree):
     lines = read_input()
 
     width = 101
@@ -96,6 +125,11 @@ def main():
     part_2 = do_part_2(guards, width, height)
     print(f"{part_2=}")
 
+    if show_tree:
+        # This requires pillow, you could run with
+        # uv run --with pillow day14.py
+        display_tree(guards, width, height, turns=part_2)
+
 
 def read_input() -> list[str]:
     with open("day14.txt") as f:
@@ -103,4 +137,7 @@ def read_input() -> list[str]:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--show-tree", action="store_true")
+    args = parser.parse_args()
+    main(args.show_tree)
