@@ -45,6 +45,44 @@ def find_path_to_end(points, start):
     return seen
 
 
+def find_path_to_end_2(points, start):
+    initial_position = (start, (1, 0))  # starting square facing east
+    seen = {initial_position: 0}
+    best_paths = {initial_position: {(start,)}}
+    queue = set([initial_position])
+
+    while queue:
+        (position, direction) = queue.pop()
+        cost = seen[position, direction]
+        paths = best_paths[position, direction]
+
+        for new_position, new_direction, new_cost in next_states(
+            position, direction, cost
+        ):
+            # print("considering", new_position, new_direction, new_cost)
+            if new_position not in points:
+                continue
+            # print("considering", new_position, new_direction, )
+            # if it's a new low, replace the existing paths
+            # if it's equal add the paths
+            # otherwise skip
+            current_cost = seen.get((new_position, new_direction), new_cost + 1)
+            if current_cost < new_cost:
+                continue
+
+            if current_cost > new_cost:
+                # Clear the existing paths because we've found a better one
+                best_paths[new_position, new_direction] = set()
+                seen[(new_position, new_direction)] = new_cost
+
+            best_paths[new_position, new_direction] |= {
+                x + (new_position,) for x in paths
+            }
+            queue.add((new_position, new_direction))
+
+    return best_paths
+
+
 def main() -> None:
     lines = read_input()
 
@@ -67,7 +105,15 @@ def main() -> None:
     part_1 = min(v for k, v in seen.items() if k[0] == end)
     print(f"{part_1=}")
 
-    part_2 = ""
+    best_paths = find_path_to_end_2(points, start)
+    paths = [v for k, v in best_paths.items() if k[0] == end]
+    points = set()
+    for ppp in paths:
+        for pp in ppp:
+            for p in pp:
+                points.add(p)
+
+    part_2 = len(points)
     print(f"{part_2=}")
 
 
