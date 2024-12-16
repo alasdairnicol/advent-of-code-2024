@@ -3,7 +3,6 @@ import itertools
 from collections import defaultdict
 from typing import TypeVar
 
-
 T = TypeVar("T")
 Point = tuple[int, int]
 Grid = dict[Point, T]
