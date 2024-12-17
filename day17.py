@@ -8,26 +8,12 @@ def parse_input(input: str) -> tuple[list[int], list[int]]:
     return registers, program
 
 
-def combo_operand(registers, value):
-    match value:
-        case _ if 0 <= value <= 3:
-            return value
-        case 4:
-            return registers[0]
-        case 5:
-            return registers[1]
-        case 6:
-            return registers[2]
-        case _:
-            raise ValueError("Unexpected operand")
-
-
 class Computer:
-    def __init__(self, registers, program):
+    def __init__(self, registers: list[int], program: list[int]) -> None:
         self.pointer = 0
         self.registers = registers
         self.program = program
-        self.output = []
+        self.output: list[int] = []
 
         self.instructions = [
             self.adv,
@@ -40,56 +26,50 @@ class Computer:
             self.cdv,
         ]
 
-    def run(self):
+    def run(self) -> None:
         try:
             while True:
                 self.do_turn()
         except IndexError:
             pass
 
-    def do_turn(self):
+    def do_turn(self) -> None:
         instruction = self.instructions[self.program[self.pointer]]
         operand = self.program[self.pointer + 1]
         jump = instruction(operand)
         self.pointer = jump if jump is not None else self.pointer + 2
 
-    def adv(self, operand):
+    def adv(self, operand: int) -> None:
         # calc register A // 2^(combo operand), store in A
-        self.registers[0] = self.registers[0] // 2 ** combo_operand(
-            self.registers, operand
-        )
+        self.registers[0] = self.registers[0] // 2 ** self.combo_operand(operand)
 
-    def bxl(self, operand):
+    def bxl(self, operand: int) -> None:
         # bitwise xor of register B with literal operand
         self.registers[1] ^= operand
 
-    def bst(self, operand):
+    def bst(self, operand: int) -> None:
         # set B to combo operand mod 8
-        self.registers[1] = combo_operand(self.registers, operand) % 8
+        self.registers[1] = self.combo_operand(operand) % 8
 
-    def jnz(self, operand):
+    def jnz(self, operand: int) -> int | None:
         return None if self.registers[0] == 0 else operand
 
-    def bxc(self, _):
+    def bxc(self, _: int) -> None:
         # bitwise xor of B and C, store in B
         self.registers[1] ^= self.registers[2]
 
-    def out(self, operand):
-        self.output.append(combo_operand(self.registers, operand) % 8)
+    def out(self, operand: int) -> None:
+        self.output.append(self.combo_operand(operand) % 8)
 
-    def bdv(self, operand):
+    def bdv(self, operand: int) -> None:
         # calc register A // 2^(combo operand), store in B
-        self.registers[1] = self.registers[0] // 2 ** combo_operand(
-            self.registers, operand
-        )
+        self.registers[1] = self.registers[0] // 2 ** self.combo_operand(operand)
 
-    def cdv(self, operand):
+    def cdv(self, operand: int) -> None:
         # calc register A // 2^(combo operand), store in C
-        self.registers[2] = self.registers[0] // 2 ** combo_operand(
-            self.registers, operand
-        )
+        self.registers[2] = self.registers[0] // 2 ** self.combo_operand(operand)
 
-    def combo_operand(self, operand):
+    def combo_operand(self, operand: int) -> int:
         match operand:
             case _ if 0 <= operand <= 3:
                 return operand
@@ -103,7 +83,7 @@ class Computer:
                 raise ValueError("Unexpected operand")
 
     @property
-    def output_string(self):
+    def output_string(self) -> str:
         return ",".join(str(o) for o in self.output)
 
 
