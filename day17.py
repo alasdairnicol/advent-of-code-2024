@@ -29,6 +29,15 @@ class Computer:
         self.program = program
         self.output = []
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            self.do_turn()
+        except IndexError:
+            raise StopIteration
+
     def do_turn(self):
         instruction = self.get_instruction(self.program[self.pointer])
         operand = self.program[self.pointer + 1]
@@ -96,21 +105,30 @@ class Computer:
             self.cdv,
         ][operand]
 
+    @property
+    def output_string(self):
+        return ",".join(str(o) for o in self.output)
+
+
+def do_part_1(registers, program) -> str:
+    computer = Computer(registers, program)
+    for _ in computer:
+        pass
+
+    return computer.output_string
+
+
+def do_part_2(registers, program) -> None:
+    return 0
+
 
 def main() -> None:
     registers, program = parse_input(read_input())
 
-    computer = Computer(registers, program)
-    while True:
-        try:
-            computer.do_turn()
-        except IndexError:
-            break
-
-    part_1 = ",".join(str(o) for o in computer.output)
+    part_1 = do_part_1(registers, program)
     print(f"{part_1=}")
 
-    part_2 = ""
+    part_2 = do_part_2(registers, program)
     print(f"{part_2=}")
 
 
