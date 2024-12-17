@@ -118,8 +118,34 @@ def do_part_1(registers, program) -> str:
     return computer.output_string
 
 
-def do_part_2(registers, program) -> None:
-    return 0
+def do_part_2(original_registers, program) -> None:
+    # I observed that for each additional matching digit,
+    # the value of register a increased just over 8x.
+    # Therefore we can minimize the number of values to check
+    # by multiplying the current guess by 8 each time we match
+    # another digit.
+    guess = 0
+
+    for n in range(1, len(program) + 1):
+        guess *= 8
+        wanted = program[-n:]
+
+        while True:
+            # if a % 10000000 == 0:
+            # print(a)
+            registers = original_registers[:]
+            registers[0] = guess
+
+            computer = Computer(registers, program)
+            for _ in computer:
+                pass
+
+            if computer.output[-n:] == wanted:
+                break
+
+            guess += 1
+
+    return guess
 
 
 def main() -> None:
