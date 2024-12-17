@@ -29,6 +29,17 @@ class Computer:
         self.program = program
         self.output = []
 
+        self.instructions = [
+            self.adv,
+            self.bxl,
+            self.bst,
+            self.jnz,
+            self.bxc,
+            self.out,
+            self.bdv,
+            self.cdv,
+        ]
+
     def __iter__(self):
         return self
 
@@ -39,7 +50,7 @@ class Computer:
             raise StopIteration
 
     def do_turn(self):
-        instruction = self.get_instruction(self.program[self.pointer])
+        instruction = self.instructions[self.program[self.pointer]]
         operand = self.program[self.pointer + 1]
         jump = instruction(operand)
         self.pointer = jump if jump is not None else self.pointer + 2
@@ -92,18 +103,6 @@ class Computer:
                 return self.registers[2]
             case _:
                 raise ValueError("Unexpected operand")
-
-    def get_instruction(self, operand):
-        return [
-            self.adv,
-            self.bxl,
-            self.bst,
-            self.jnz,
-            self.bxc,
-            self.out,
-            self.bdv,
-            self.cdv,
-        ][operand]
 
     @property
     def output_string(self):
