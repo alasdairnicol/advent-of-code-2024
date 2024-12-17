@@ -40,14 +40,12 @@ class Computer:
             self.cdv,
         ]
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
+    def run(self):
         try:
-            self.do_turn()
+            while True:
+                self.do_turn()
         except IndexError:
-            raise StopIteration
+            pass
 
     def do_turn(self):
         instruction = self.instructions[self.program[self.pointer]]
@@ -111,13 +109,12 @@ class Computer:
 
 def do_part_1(registers, program) -> str:
     computer = Computer(registers, program)
-    for _ in computer:
-        pass
+    computer.run()
 
     return computer.output_string
 
 
-def do_part_2(original_registers, program) -> None:
+def do_part_2(original_registers, program) -> int:
     # I observed that for each additional matching digit,
     # the value of register a increased just over 8x.
     # Therefore we can minimize the number of values to check
@@ -136,8 +133,7 @@ def do_part_2(original_registers, program) -> None:
             registers[0] = guess
 
             computer = Computer(registers, program)
-            for _ in computer:
-                pass
+            computer.run()
 
             if computer.output[-n:] == wanted:
                 break
