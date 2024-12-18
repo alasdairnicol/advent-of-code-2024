@@ -30,20 +30,42 @@ def find_length_of_shortest_path(grid: Grid, start: Point, end: Point) -> int | 
     return best.get(end)
 
 
+def has_path(lines: list[str], start: Point, end: Point, turns: int):
+    grid = make_grid(lines, turns=turns)
+    return find_length_of_shortest_path(grid, start, end) is not None
+
+
+def do_part_1(lines: list[str], start: Point, end: Point) -> int:
+    grid = make_grid(lines, 1024)
+    length = find_length_of_shortest_path(grid, start, end)
+    assert length is not None
+    return length
+
+
+def do_part_2(lines: list[str], start: Point, end: Point) -> str:
+    low = 1024
+    high = len(lines)
+    while high - low > 1:
+        guess = (low + high) // 2
+        if has_path(lines, start, end, guess):
+            low = guess
+        else:
+            high = guess
+    # The high'th entry is at index high - 1
+    return lines[high - 1].strip()
+
+
 def main() -> None:
 
     lines = read_input()
 
     start = (0, 0)
     end = (70, 70)
-    turns = 1024
-    grid = make_grid(lines, turns)
-    print(grid)
 
-    part_1 = find_length_of_shortest_path(grid, start, end)
+    part_1 = do_part_1(lines, start, end)
     print(f"{part_1=}")
 
-    part_2 = ""
+    part_2 = do_part_2(lines, start, end)
     print(f"{part_2=}")
 
 
