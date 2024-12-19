@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 Point = tuple[int, int]
+Vector = tuple[int, int]
 
 
 def make_points(lines: list[str]) -> set[Point]:
@@ -14,7 +15,7 @@ def make_points(lines: list[str]) -> set[Point]:
     )
 
 
-def next_states(position, direction, cost):
+def next_states(position: Point, direction: Vector, cost: int):
     x, y = position
     dx, dy = direction
 
@@ -23,7 +24,7 @@ def next_states(position, direction, cost):
     yield ((x, y), (dy, -dx), cost + 1000)  # turn anticlockwise
 
 
-def find_path_to_end(points, start):
+def find_path_to_end(points: set[Point], start: Point):
     initial_position = (start, (1, 0))  # starting square facing east
     seen = {initial_position: 0}
     queue = set([initial_position])
@@ -45,10 +46,12 @@ def find_path_to_end(points, start):
     return seen
 
 
-def find_path_to_end_2(points, start):
+def find_path_to_end_2(points: set[Point], start: Point):
     initial_position = (start, (1, 0))  # starting square facing east
     seen = {initial_position: 0}
-    best_paths = {initial_position: {(start,)}}
+    best_paths: dict[tuple[Point, Point], set[tuple[Point, ...]]] = {
+        initial_position: {(start,)}
+    }
     queue = set([initial_position])
 
     while queue:
@@ -107,11 +110,12 @@ def main() -> None:
 
     best_paths = find_path_to_end_2(points, start)
     paths = [v for k, v in best_paths.items() if k[0] == end]
+
     points = set()
-    for ppp in paths:
-        for pp in ppp:
-            for p in pp:
-                points.add(p)
+    for path_set in paths:
+        for path_tuple in path_set:
+            for path in path_tuple:
+                points.add(path)
 
     part_2 = len(points)
     print(f"{part_2=}")
