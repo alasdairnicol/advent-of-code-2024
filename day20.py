@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import collections
 import itertools
+from typing import Generator
 
 Point = tuple[int, int]
 Grid = set[Point]
@@ -31,7 +32,9 @@ def find_path(grid: Grid, start: Point) -> Distances:
     return distances
 
 
-def find_two_stepshortcuts(distances: Distances, point: Point):
+def find_two_stepshortcuts(
+    distances: Distances, point: Point
+) -> Generator[int, None, None]:
     # for part 1
     x, y = point
     distance = distances[point]
@@ -43,7 +46,7 @@ def find_two_stepshortcuts(distances: Distances, point: Point):
                 yield saved
 
 
-def do_part_1(distances) -> int:
+def do_part_1(distances: Distances) -> int:
     shortcuts = []
     for point in distances:
         for shortcut in find_two_stepshortcuts(distances, point):
@@ -51,7 +54,7 @@ def do_part_1(distances) -> int:
     return len([x for x in shortcuts if x >= 100])
 
 
-def do_part_2(distances) -> int:
+def do_part_2(distances: Distances) -> int:
     count = 0
     for (sx, sy), (ex, ey) in itertools.combinations(distances, 2):
         saving = abs(distances[ex, ey] - distances[sx, sy]) - (
