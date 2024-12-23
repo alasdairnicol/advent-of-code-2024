@@ -32,12 +32,18 @@ def do_part_1(connections: Connections) -> int:
 
 
 def do_part_2(connections: Connections) -> str:
-    num_connections = 13
-    assert [len(v) == num_connections for v in connections]
-    for c, v in connections.items():
-        for nodes in itertools.combinations(v | {c}, num_connections):
-            if is_fully_connected(connections, nodes):
-                return ",".join(sorted(nodes))
+    # This is a very specific solution that works for my input.
+    # I saw that every node was connected to 13 other nodes
+    # That would give a maximum possible clique size of 14
+    # By inspection, I could see a clique of 12.
+    # Therefore my solution could brute force through the possible
+    # cliques of 14 and 13 until it found one.
+    assert [len(v) == 13 for v in connections]
+    for clique_size in range(14, 0, -1):
+        for c, v in connections.items():
+            for nodes in itertools.combinations(v | {c}, clique_size):
+                if is_fully_connected(connections, nodes):
+                    return ",".join(sorted(nodes))
 
     # Shouldn't ever get here
     raise ValueError
